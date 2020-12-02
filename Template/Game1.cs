@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
 
 namespace Template
 {
@@ -14,6 +13,7 @@ namespace Template
         SpriteBatch spriteBatch;
 
         Player p;
+        EnemyClass eC;
         //KOmentar
         public Game1()
         {
@@ -43,8 +43,9 @@ namespace Template
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            p = new Player(Content.Load<Texture2D>("xwing"), new Vector2(200, 650), new Rectangle(200, 650, 50, 50));
-            
+            p = new Player(Content.Load<Texture2D>("xwing"), Content.Load<Texture2D>("bullet4"), new Vector2(200, 650), new Rectangle(200, 650, 50, 50));
+            eC.StartTime();
+            EnemyClass.standardEnemyTexture = Content.Load<Texture2D>("xwingRotaded");
             // TODO: use this.Content to load your game content here 
         }
 
@@ -67,7 +68,11 @@ namespace Template
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             p.Update();
-            foreach(Bullet element in p.BList)
+            foreach (Bullet element in p.BList)
+            {
+                element.Update();
+            }
+            foreach (EnemyClass element in EnemyClass.EnemyList)
             {
                 element.Update();
             }
@@ -88,6 +93,10 @@ namespace Template
             spriteBatch.Begin();
             p.Draw(spriteBatch);
             foreach (Bullet element in p.BList)
+            {
+                element.Draw(spriteBatch);
+            }
+            foreach (EnemyClass element in EnemyClass.EnemyList)
             {
                 element.Draw(spriteBatch);
             }
